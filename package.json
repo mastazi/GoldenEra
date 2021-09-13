@@ -25,6 +25,9 @@
     "electron": "^14.0.0"
   },
   "dependencies": {
+    "gemini-fetch": "^1.0.0",
+    "gopher-lib": "^0.2.0",
+    "net": "^1.0.2",
     "typescript": "^4.4.3"
   }
 }
