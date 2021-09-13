@@ -1,0 +1,30 @@
+{
+  "name": "golden-era",
+  "version": "1.0.0",
+  "description": "A browser for a simpler web.",
+  "main": "build/main.js",
+  "scripts": {
+    "start": "tsc && electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mastazi/GoldenEra.git"
+  },
+  "keywords": [
+    "gemini",
+    "gopher",
+    "finger"
+  ],
+  "author": "mastazi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mastazi/GoldenEra/issues"
+  },
+  "homepage": "https://github.com/mastazi/GoldenEra#readme",
+  "devDependencies": {
+    "electron": "^14.0.0"
+  },
+  "dependencies": {
+    "typescript": "^4.4.3"
+  }
+}
