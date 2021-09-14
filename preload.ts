@@ -51,8 +51,6 @@ const fingerRequest = async (path: string): Promise<{ text: string }> => {
       text = text + data;
     })
     socket.on('end', () => {
-      // prune off the 'want another' line
-      text = text.replace(/^---\nwant another.*?$/m, '');
       resolve({ text });
     });
     socket.on('error', (error: any) => {
