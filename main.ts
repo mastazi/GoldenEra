@@ -5,6 +5,11 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
+    titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      color: '#fff',
+      symbolColor: '#000'
+    },
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nativeWindowOpen: true
@@ -12,6 +17,7 @@ function createWindow() {
   })
 
   win.loadFile('index.html')
+  // win.webContents.openDevTools()
 }
 
 app.on('window-all-closed', function () {
