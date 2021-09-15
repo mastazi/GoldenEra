@@ -25,12 +25,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
 const fingerPopulate = async () => {
   const response = await fingerRequest('benbrown@happynetbox.com');
-  return response.text;
+  return response.text();
 }
 
 const gohperPopulate = async () => {
   const response = await gopherRequest('gopher://cosmic.voyage:70/0/Aker/210207.txt');
-  return response.text;
+  return response.text();
 }
 
 const geminiPopulate = async () => {
@@ -38,7 +38,7 @@ const geminiPopulate = async () => {
   return response.text();
 }
 
-const fingerRequest = async (path: string): Promise<{ text: string }> => {
+const fingerRequest = async (path: string): Promise<{ text: () => string }> => {
   return new Promise((resolve, reject) => {
     const [handle, host] = path.split(/@/);
     const [hostname, port] = host.split(/:/);
@@ -51,7 +51,7 @@ const fingerRequest = async (path: string): Promise<{ text: string }> => {
       text = text + data;
     })
     socket.on('end', () => {
-      resolve({ text });
+      resolve({ text: () => { return text; } });
     });
     socket.on('error', (error: any) => {
       console.log(`Error: ${error}`);
@@ -60,7 +60,7 @@ const fingerRequest = async (path: string): Promise<{ text: string }> => {
   });
 }
 
-const gopherRequest = async (path: string): Promise<{ text: string }> => {
+const gopherRequest = async (path: string): Promise<{ text: () => string }> => {
   return new Promise((resolve, reject) => {
     gopher.get(path, (err: string, reply: any) => {
       if (err) {
@@ -68,7 +68,7 @@ const gopherRequest = async (path: string): Promise<{ text: string }> => {
         reject;
       } else {
         console.log(reply.text)
-        resolve(reply);
+        resolve({ text: () => { return reply.text } });
       }
     });
   })
