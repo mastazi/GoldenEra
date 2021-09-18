@@ -12,6 +12,11 @@ window.addEventListener('DOMContentLoaded', () => {
     if (element) element.innerText = text
   }
 
+  const replaceHtml = (selector: string, text: string) => {
+    const element = document.getElementById(selector)
+    if (element) element.innerHTML = text
+  }
+
   const urlBarButton = document.querySelector('#url-bar-btn');
 
   const urlBarInput: HTMLInputElement | null = document.querySelector('#url-bar-input');
@@ -19,7 +24,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const submitRequest = (url: string) => {
     if (url.includes('gopher://')) {
       gohperPopulate(url).then((response) => {
-        replaceText('content-area', response);
+        replaceHtml('content-area', response);
       })
     } else if (url.includes('gemini://')) {
       geminiPopulate(url).then((response) => {
@@ -110,22 +115,22 @@ const gopherRequest = async (path: string): Promise<{ text: () => string }> => {
       } else {
         if (reply.text) {
           console.log(reply.text)
-          resolve({ text: () => { return reply.text } });
+          resolve({ text: () => { return reply.text.replace(/(?:\r\n|\r|\n)/g, '<br>') } });
         }
         if (reply.directory) {
           console.log(reply.directory)
           let dirText = '';
           for (const line of reply.directory) {
             if (line.type === 'i') {
-              dirText += `${line.name}\r\n`;
+              dirText += `${line.name}<br>`;
             } else if (line.type === '0' || line.type == '1') {
-              dirText += `=> gopher://${line.host}:${line.port}${gopherSelectorClean(line.selector)}${line.query ? '?' + line.query : ''} ${line.name}\r\n`
+              dirText += `<a href="gopher://${line.host}:${line.port}${gopherSelectorClean(line.selector)}${line.query ? '?' + line.query : ''}">${line.name}</a><br>`
             } else if (line.type === 'g' || line.type == 'I' || line.type == '9' || line.type == '5' || line.type == 'd' || line.type == 's') {
-              dirText += `FILE ${line.type} => gopher://${line.host}:${line.port}${gopherSelectorClean(line.selector)}${line.query ? '?' + line.query : ''} ${line.name}\r\n`
+              dirText += `FILE ${line.type} => "gopher://${line.host}:${line.port}${gopherSelectorClean(line.selector)}${line.query ? '?' + line.query : ''}" ${line.name}<br>`
             } else if (line.type === 'h') {
-              dirText += `=> ${gopherSelectorClean(line.selector).replace('URL:', '')} ${line.name}\r\n`
+              dirText += `=> ${gopherSelectorClean(line.selector).replace('URL:', '')} ${line.name}<br>`
             } else {
-              dirText += `UNKNOWN: type ${line.type} => ${line.host}:${line.port}${gopherSelectorClean(line.selector)} ${line.name}\r\n`
+              dirText += `UNKNOWN: type ${line.type} => "${line.host}:${line.port}${gopherSelectorClean(line.selector)}" ${line.name}<br>`
             }
           }
           resolve({ text: () => { return dirText } });
