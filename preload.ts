@@ -40,7 +40,8 @@ const geminiPopulate = async () => {
 
 const fingerRequest = async (path: string): Promise<{ text: () => string }> => {
   return new Promise((resolve, reject) => {
-    const [handle, host] = path.split(/@/);
+    const fingerPath = path.replace('finger://', '');
+    const [handle, host] = fingerPath.split(/@/);
     const [hostname, port] = host.split(/:/);
     const socket = net.connect(port ?? 79, hostname);
     let text = '';
