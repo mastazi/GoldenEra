@@ -42,9 +42,26 @@ window.addEventListener('DOMContentLoaded', () => {
       submitRequest(url);
     }
   });
+
+  urlBarInput?.addEventListener('keydown', (ev) => {
+    if (isKeyboardEvent(ev)) {
+      if (ev.code === 'Enter') {
+        const url = urlBarInput?.value;
+        if (url) {
+          submitRequest(url);
+        }
+      }
+    }
+  });
 })
 
+const isKeyboardEvent = (event: Event): event is KeyboardEvent => {
+  return true;
+}
 
+const gopherSelectorClean = (selector: string) => {
+  return selector.replace(/\\/g, '/');
+}
 
 const fingerPopulate = async (url: string) => {
   const response = await fingerRequest(url);
@@ -91,8 +108,32 @@ const gopherRequest = async (path: string): Promise<{ text: () => string }> => {
         console.error(err);
         reject;
       } else {
-        console.log(reply.text)
-        resolve({ text: () => { return reply.text } });
+        if (reply.text) {
+          console.log(reply.text)
+          resolve({ text: () => { return reply.text } });
+        }
+        if (reply.directory) {
+          console.log(reply.directory)
+          let dirText = '';
+          for (const line of reply.directory) {
+            if (line.type === 'i') {
+              dirText += `${line.name}\r\n`;
+            } else if (line.type === '0' || line.type == '1') {
+              dirText += `=> gopher://${line.host}:${line.port}${gopherSelectorClean(line.selector)}${line.query ? '?' + line.query : ''} ${line.name}\r\n`
+            } else if (line.type === 'g' || line.type == 'I' || line.type == '9' || line.type == '5' || line.type == 'd' || line.type == 's') {
+              dirText += `FILE ${line.type} => gopher://${line.host}:${line.port}${gopherSelectorClean(line.selector)}${line.query ? '?' + line.query : ''} ${line.name}\r\n`
+            } else if (line.type === 'h') {
+              dirText += `=> ${gopherSelectorClean(line.selector).replace('URL:', '')} ${line.name}\r\n`
+            } else {
+              dirText += `UNKNOWN: type ${line.type} => ${line.host}:${line.port}${gopherSelectorClean(line.selector)} ${line.name}\r\n`
+            }
+          }
+          resolve({ text: () => { return dirText } });
+        }
+        if (reply.buffer) {
+          console.error('buffer type not supported')
+          reject;
+        }
       }
     });
   })
