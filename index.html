@@ -11,10 +11,25 @@
       user-select: none;
       background-color: #6a7b8d;
       margin: 0;
-      height: 36px;
+      height: 24px;
       width: 100%;
       position: fixed;
       top: 0;
+      padding: 5px;
+    }
+
+    #url-bar {
+      width: 100%;
+      display: flex;
+      margin-bottom: 10px;
+    }
+
+    #url-bar-input {
+      flex-grow: 10;
+    }
+
+    #url-bar-btn {
+      flex-grow: 1;
     }
 
     body {
@@ -42,13 +57,11 @@
 
 <body>
   <div id="titlebar">This is the titlebar</div>
-  <h1>Hello World!</h1>
-  <h2>Finger</h2>
-  <div id="finger"></div>
-  <h2>Gopher</h2>
-  <div id="gopher"></div>
-  <h2>Gemini</h2>
-  <div id="gemini"></div>
+  <div id="url-bar">
+    <input type="text" id="url-bar-input" placeholder="Enter a gemini:// or gopher:// or finger:// url" />
+    <button type="button" id="url-bar-btn">Go!</button>
+  </div>
+  <div id="content-area">Content will be here</div>
 
   <script src="./renderer.js"></script>
 </body>
