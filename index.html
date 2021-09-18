@@ -17,14 +17,18 @@
       top: 0;
     }
 
-    div {
+    div,
+    pre {
       padding: 5px;
+      font-family: 'Courier New', Courier, monospace;
     }
 
     #url-bar {
       width: 100%;
       display: flex;
       margin-bottom: 10px;
+      position: fixed;
+      top: 26;
     }
 
     #url-bar-input {
@@ -37,7 +41,7 @@
 
     body {
       margin: 0;
-      padding: 36px 0 0 0;
+      padding: 52px 0 0 0;
       font-family: 'Courier New', Courier, monospace;
       color: #eee;
       background-color: lightslategray;
@@ -55,6 +59,15 @@
     ::-webkit-scrollbar-thumb {
       background-color: #6a7b8d;
     }
+
+    #main-area {
+      display: flex;
+    }
+
+    #content-area {
+      width: 85ch;
+      margin: 0 auto;
+    }
   </style>
 </head>
 
@@ -64,7 +77,9 @@
     <input type="text" id="url-bar-input" placeholder="Enter a gemini:// or gopher:// or finger:// url" />
     <button type="button" id="url-bar-btn">Go!</button>
   </div>
-  <div id="content-area">Content will be here</div>
+  <div id="main-area">
+    <pre id="content-area">Content will be here</pre>
+  </div>
 
   <!-- <script src="./renderer.js"></script> -->
 </body>
