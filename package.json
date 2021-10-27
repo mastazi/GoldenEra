@@ -6,7 +6,8 @@
   "scripts": {
     "start": "tsc && electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "rebuild": "./node_modules/.bin/electron-rebuild"
   },
   "repository": {
     "type": "git",
