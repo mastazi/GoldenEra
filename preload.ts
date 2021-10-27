@@ -1,10 +1,7 @@
 const net = require('net');
 const gopherLib = require('gopher-lib');
 const gopher = new gopherLib.Client();
-const gemini = require('gemini-fetch')({
-  followRedirects: true,
-  useClientCerts: true
-})
+const gemini = require('@derhuerst/gemini/client')
 
 window.addEventListener('DOMContentLoaded', () => {
   const replaceText = (selector: string, text: string) => {
@@ -145,6 +142,32 @@ const gopherRequest = async (path: string): Promise<{ text: () => string }> => {
 }
 
 const geminiRequest = async (path: string) => {
-  return gemini(path);
+  let response = '';
+  await gemini(
+    path,
+    {
+      followRedirects: true,
+      useClientCerts: true,
+      tlsOpt: {
+        rejectUnauthorized: false,
+      },
+      letUserConfirmClientCertUsage: ({ host, reason }: any, cb: (arg0: boolean) => any) => {
+        console.log("confirm required, host:", host);
+        console.log("confirm required, reason:", reason);
+        cb(true);
+      },
+    },
+    (err: any, res: any) => {
+      if (err) {
+        console.error('error with gemini request', err)
+      }
+
+      // console.log(res.statusCode, res.statusMessage)
+      // if (res.meta) console.log(res.meta)
+      // res.on('data', (data: any) => { response += data.toString() });
+      console.log('response is: ', res);
+    }
+  );
+  return { text: () => response };
 }
 
