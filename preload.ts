@@ -3,7 +3,7 @@ const gopherLib = require('gopher-lib');
 const gopher = new gopherLib.Client();
 const gemini = require('gemini-fetch')({
   followRedirects: true,
-  useClientCerts: false
+  useClientCerts: true
 })
 
 window.addEventListener('DOMContentLoaded', () => {
